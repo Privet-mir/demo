@@ -1,0 +1,22 @@
+
+ord ca user : oca
+ord ca pass : Q2SkoklmmqloDefEvv
+
+peer ca user: pca
+pass: Q2SkoklmmqloDefEvv
+
+kubectl exec -n root-ca $CA_POD -- bash -c 'fabric-ca-client enroll -d -u http://$CA_ADMIN:$CA_PASSWORD@$SERVICE_DNS:7054'
+
+kubectl exec -n root-ca $CA_POD -- bash -c 'fabric-ca-client register --id.name oca --id.secret Q2SkoklmmqloDefEvv --id.attrs 'hf.IntermediateCA=true''
+
+
+kubectl exec -n root-ca $CA_POD -- bash -c 'fabric-ca-client enroll -d -u http://oca:Q2SkoklmmqloDefEvv@$SERVICE_DNS:7054 --enrollment.attrs "hf.IntermediateCA"'
+
+ helm install ../ord-ca -n org1ca --namespace org1-ca -f org1ca.yaml
+
+
+helm del --purge cli rca peer2 peer1 org2peer2 org2peer1 org2cli org2-couchdb2 org2-couchdb1 org2-ca org1peer2 org1peer1 org1cli org1-couchdb2 org1-couchdb1 org1-ca oca mpca mainorg-couchdb2 mainorg-couchdb1 kafka-hlf educhain1 educhain2 educhain3
+
+
+kubectl delete ns mainorg-peer orderer org1 org2 root-ca
+

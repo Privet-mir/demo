@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rootca--ca
+type: Opaque
+data:
+  CA_ADMIN: bW9wY2E=
+  CA_PASSWORD: UTJTa29rbG1tcWxvRGVmRXZ2

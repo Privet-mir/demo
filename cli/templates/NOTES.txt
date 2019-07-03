@@ -1,0 +1,11 @@
+Run the following commands to...
+1. Get the name of the pod running the Fabric Peer:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ include "cli.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+
+
+3. Obtain CA_USERNAME and CA_PASSWORD to register identity with CA:
+  export CA_USERNAME=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "cli.fullname" . }} -o jsonpath="{.data.CA_USERNAME}" | base64 --decode; echo)
+  export CA_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "cli.fullname" . }} -o jsonpath="{.data.CA_PASSWORD}" | base64 --decode; echo)
+
+4. Update the chart without resetting a password (requires running step 3):
+  helm upgrade {{ .Release.Name }} stable/cli --namespace {{ .Release.Namespace }} -f my-values.yaml --set caUsername=$CA_USERNAME,caPassword=$CA_PASSWORD

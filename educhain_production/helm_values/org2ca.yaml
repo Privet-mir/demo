@@ -1,0 +1,64 @@
+image:
+  tag: 1.4.1
+
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-issuer: "letsencrypt-production"
+  path: /
+  hosts:
+    # TODO: Change this to your Domain Name
+    - org2ca.zx.kmindz.xyz
+  tls:
+    - secretName: org1ca--tls
+      hosts:
+        # TODO: Change this to your Domain Name
+        - org2ca.zx.kmindz.xyz
+
+persistence:
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+caName: org2ca
+
+secrets:
+  rootca: rootca--tls
+
+postgresql:
+  enabled: false
+
+config:
+  hlfToolsVersion: 1.4.0
+  csr:
+    names:
+      c: IN
+      st: MH
+      l:
+      o: "Kmindz"
+      ou: Blockchain
+  intermediate:
+    parent:
+      chart: rootca
+      url: rootca.zx.kmindz.xyz
+      port: 7054
+  affiliations:
+    kmindz: []
+    
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 95
+        podAffinityTerm:
+          topologyKey: "kubernetes.io/hostname"
+          labelSelector:
+            matchLabels:
+              app: org2ca
+#  podAffinity:
+#    requiredDuringSchedulingIgnoredDuringExecution:
+#    - labelSelector:
+#        matchLabels:
+#          app: postgresql
+#          release: ca
+#      topologyKey: "kubernetes.io/hostname"

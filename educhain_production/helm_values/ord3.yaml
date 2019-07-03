@@ -1,0 +1,43 @@
+image:
+  tag: 1.4.1
+
+persistence:
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+ingress:
+  enabled: true
+  annotations: 
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    certmanager.k8s.io/cluster-issuer: "letsencrypt-production"
+  path: /
+  hosts:
+   - orderer3.zx.kmindz.xyz
+  tls: 
+   - secretName: orderer3-tls
+     hosts:
+       - orderer3.zx.kmindz.xyz
+
+ord:
+  type: kafka
+  mspID: OrdererMSP
+
+secrets:
+  ord:
+    cert: hlf--ord3-idcert
+    key: hlf--ord3-idkey
+    caCert: hlf--ord-ca-cert
+    intCaCert: hlf--ord3-caintcert
+  genesis: hlf--genesis
+  adminCert: hlf--ord-admincert  
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 95
+        podAffinityTerm:
+          topologyKey: "kubernetes.io/hostname"
+          labelSelector:
+            matchLabels:
+              app: orderer

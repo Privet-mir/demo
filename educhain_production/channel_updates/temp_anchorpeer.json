@@ -1,0 +1,11 @@
+{
+    "mod_policy": "Admins",
+    "value": {
+      "anchor_peers": [
+        {
+          "host": "@@@-peer1-edu-peer.@@@.svc.cluster.local",
+          "port": 7051
+        }
+      ]
+    }
+}

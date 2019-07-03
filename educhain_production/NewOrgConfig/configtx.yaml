@@ -1,0 +1,18 @@
+Organizations:
+    - &org3
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: org3MSP
+
+        # ID to load the MSP definition as
+        ID: org3MSP
+
+        MSPDir: ./org3MSP
+
+        AnchorPeers:
+            # AnchorPeers defines the location of peers which can be used
+            # for cross org gossip communication.  Note, this value is only
+            # encoded in the genesis block in the Application section context
+            - Host: org3peer1-educhain.demo.svc.cluster.local
+              Port: 7051
+

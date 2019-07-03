@@ -1,0 +1,52 @@
+image:
+  tag: 1.4.1
+
+persistence:
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+
+ingress:
+  enabled: true
+  annotations: 
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    certmanager.k8s.io/cluster-issuer: "letsencrypt-production"
+  path: /
+  hosts:
+   - org2peer2.zx.kmindz.xyz
+  tls: 
+   - secretName: peer2-tls
+     hosts:
+       - org2peer2.zx.kmindz.xyz
+
+
+peer:
+  databaseType: CouchDB
+  couchdbInstance: org2-couchdb2
+  mspID: Org2
+#  tls:
+#    server:
+#      enabled: "true"
+#    client:
+#      enabled: "true"
+
+secrets:
+  peer:
+    cert: hlf--org2peer2-idcert
+    key: hlf--org2peer2-idkey
+    caCert: hlf--peer-ca-cert
+    intCaCert: hlf--org2peer2-caintcert
+#  channel: hlf--channel
+  adminCert: hlf--peer-admincert
+  adminKey: hlf--peer-adminkey
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 95
+        podAffinityTerm:
+          topologyKey: "kubernetes.io/hostname"
+          labelSelector:
+            matchLabels:
+              app: org2
