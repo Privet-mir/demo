@@ -1,6 +1,5 @@
-# Educhain
 
-## Educhain Hyperledger Fabric Network on K8's
+# Hyperledger Fabric Network on K8's
 
 ** Prerequsite **
 
